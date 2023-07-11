@@ -34,4 +34,8 @@ public class ArtistService {
     public void delete(Artist artist) {
         artistRepository.delete(artist);
     }
+
+    public boolean existsByName(String name) {
+        return artistRepository.existsByName(name);
+    }
 }
