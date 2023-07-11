@@ -1,7 +1,7 @@
-package com.pipe.spotpipe2.controllers.response;
+package com.pipe.spotpipe2.application.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pipe.spotpipe2.models.UserModel;
+import com.pipe.spotpipe2.domain.models.users.UserModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +20,7 @@ public class UserResponse {
 
     public UserResponse(UserModel userModel) {
         this.id = userModel.getId();
-        this.name = userModel.getName();
+        this.name = userModel.getUsername();
         this.email = userModel.getEmail();
         this.birthDate = userModel.getBirthDate();
     }

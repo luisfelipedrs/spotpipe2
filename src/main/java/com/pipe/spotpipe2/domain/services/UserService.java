@@ -1,11 +1,9 @@
-package com.pipe.spotpipe2.services;
+package com.pipe.spotpipe2.domain.services;
 
-import com.pipe.spotpipe2.models.UserModel;
-import com.pipe.spotpipe2.repositories.UserRepository;
+import com.pipe.spotpipe2.domain.models.users.UserModel;
+import com.pipe.spotpipe2.domain.models.users.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +33,13 @@ public class UserService {
     @Transactional
     public void delete(UserModel userModel) {
         userRepository.delete(userModel);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

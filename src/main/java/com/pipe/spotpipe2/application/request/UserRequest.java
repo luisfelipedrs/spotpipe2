@@ -1,7 +1,7 @@
-package com.pipe.spotpipe2.controllers.request;
+package com.pipe.spotpipe2.application.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pipe.spotpipe2.models.UserModel;
+import com.pipe.spotpipe2.domain.models.users.UserModel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class UserRequest {
 
     @NotBlank
-    private String name;
+    private String username;
 
     @Email
     @NotBlank
@@ -31,6 +31,6 @@ public class UserRequest {
     private LocalDate birthDate;
 
     public UserModel toModel() {
-        return new UserModel(name, email, password, birthDate);
+        return new UserModel(username, email, password, birthDate);
     }
 }

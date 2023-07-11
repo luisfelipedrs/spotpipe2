@@ -1,12 +1,9 @@
-package com.pipe.spotpipe2.controllers;
+package com.pipe.spotpipe2.application;
 
-import com.pipe.spotpipe2.controllers.request.UserRequest;
-import com.pipe.spotpipe2.controllers.response.UserResponse;
-import com.pipe.spotpipe2.models.UserModel;
-import com.pipe.spotpipe2.services.UserService;
+import com.pipe.spotpipe2.application.request.UserRequest;
+import com.pipe.spotpipe2.application.response.UserResponse;
+import com.pipe.spotpipe2.domain.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,6 +27,14 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserRequest userRequest,
                                       UriComponentsBuilder uriBuilder) {
+
+        if (userService.existsByEmail(userRequest.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (userService.existsByUsername(userRequest.getUsername())) {
+            return ResponseEntity.badRequest().build();
+        }
 
         final var user = userService.save(userRequest.toModel());
         URI location = uriBuilder.path("/users/{id}")
@@ -68,7 +73,7 @@ public class UserController {
         final var userModel = userService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 
-        userModel.setName(userRequest.getName());
+        userModel.setUsername(userRequest.getUsername());
         userModel.setEmail(userRequest.getEmail());
         userModel.setPassword(userModel.getPassword());
         userModel.setBirthDate(userRequest.getBirthDate());
