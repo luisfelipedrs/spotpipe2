@@ -1,5 +1,6 @@
 package com.pipe.spotpipe2.domain.models.artists;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pipe.spotpipe2.domain.models.albums.Album;
 import com.pipe.spotpipe2.domain.models.songs.Song;
 import jakarta.persistence.*;
@@ -23,10 +24,12 @@ public class Artist {
     @Column(nullable = false)
     private String name;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Song> songs = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     private Set<Album> albums = new HashSet<>();
 
     public Artist(String name) {
@@ -35,6 +38,9 @@ public class Artist {
 
     public void addAlbum(Album album) {
         this.getAlbums().add(album);
-        album.setArtist(this);
+    }
+
+    public void removeAlbum(Album album) {
+        this.getAlbums().remove(album);
     }
 }

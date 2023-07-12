@@ -1,5 +1,6 @@
 package com.pipe.spotpipe2.domain.models.songs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pipe.spotpipe2.domain.models.albums.Album;
 import com.pipe.spotpipe2.domain.models.artists.Artist;
 import jakarta.persistence.*;
@@ -23,9 +24,11 @@ public class Song {
     @Column(nullable = false)
     private String genre;
 
+    @JsonBackReference
     @ManyToOne
     private Artist artist;
 
+    @JsonBackReference
     @ManyToOne
     private Album album;
 

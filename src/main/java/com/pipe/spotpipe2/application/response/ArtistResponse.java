@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
 @Getter
 public class ArtistResponse {
 
+    private Long id;
     private String name;
     private List<String> albums;
 
     public ArtistResponse(Artist artist) {
+        this.id = artist.getId();
         this.name = artist.getName();
         this.albums = artist.getAlbums()
                 .stream()

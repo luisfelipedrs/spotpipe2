@@ -1,5 +1,7 @@
 package com.pipe.spotpipe2.domain.models.albums;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pipe.spotpipe2.domain.models.artists.Artist;
 import com.pipe.spotpipe2.domain.models.songs.Song;
 import jakarta.persistence.*;
@@ -27,9 +29,11 @@ public class Album {
     @Column(nullable = false)
     private LocalDate releaseDate;
 
+    @JsonBackReference
     @ManyToOne
     private Artist artist;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Song> songs = new HashSet<>();
 
