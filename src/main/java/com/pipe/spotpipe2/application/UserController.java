@@ -3,16 +3,15 @@ package com.pipe.spotpipe2.application;
 import com.pipe.spotpipe2.application.request.UserRequest;
 import com.pipe.spotpipe2.application.response.UserResponse;
 import com.pipe.spotpipe2.domain.services.UserService;
+import com.pipe.spotpipe2.infra.exceptions.ResourceAlreadyExistsException;
+import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/users")
@@ -29,11 +28,11 @@ public class UserController {
                                       UriComponentsBuilder uriBuilder) {
 
         if (userService.existsByEmail(userRequest.getEmail())) {
-            return ResponseEntity.badRequest().build();
+            throw new ResourceAlreadyExistsException(userRequest.getEmail());
         }
 
         if (userService.existsByUsername(userRequest.getUsername())) {
-            return ResponseEntity.badRequest().build();
+            throw new ResourceAlreadyExistsException(userRequest.getUsername());
         }
 
         final var user = userService.save(userRequest.toModel());
@@ -57,14 +56,14 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
         return ResponseEntity.ok(new UserResponse(userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
+                .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 
         final var userModel = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         userService.delete(userModel);
         return ResponseEntity.noContent().build();
@@ -75,7 +74,7 @@ public class UserController {
                                         @RequestBody @Valid UserRequest userRequest) {
 
         final var userModel = userService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         userModel.setUsername(userRequest.getUsername());
         userModel.setEmail(userRequest.getEmail());

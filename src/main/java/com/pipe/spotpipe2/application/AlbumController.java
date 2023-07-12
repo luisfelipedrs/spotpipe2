@@ -4,18 +4,14 @@ import com.pipe.spotpipe2.application.request.AlbumRequest;
 import com.pipe.spotpipe2.application.response.AlbumResponse;
 import com.pipe.spotpipe2.domain.services.AlbumService;
 import com.pipe.spotpipe2.domain.services.ArtistService;
+import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.http.HttpStatus.*;
 
 @RestController
 public class AlbumController {
@@ -34,7 +30,7 @@ public class AlbumController {
                                              UriComponentsBuilder uriBuilder) {
 
         var artist = artistService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         var album = albumRequest.toModel(artist);
         artist.addAlbum(album);
@@ -60,14 +56,14 @@ public class AlbumController {
     public ResponseEntity<AlbumResponse> getAlbumById(@PathVariable Long id) {
 
         return ResponseEntity.ok(new AlbumResponse(albumService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
+                .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
     @GetMapping("/artists/{artistId}/albums")
     public ResponseEntity<List<AlbumResponse>> getAlbunsFromArtist(@PathVariable("artistId") Long id) {
 
         var artist = artistService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         return ResponseEntity.ok(artist.getAlbums().
                 stream().
@@ -79,7 +75,7 @@ public class AlbumController {
     public ResponseEntity<?> deleteAlbum(@PathVariable Long id) {
 
         final var album = albumService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         album.getArtist().removeAlbum(album);
 
@@ -92,7 +88,7 @@ public class AlbumController {
                                          @RequestBody @Valid AlbumRequest albumRequest) {
 
         final var album = albumService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         album.setTitle(albumRequest.getTitle());
         album.setReleaseDate(albumRequest.getReleaseDate());

@@ -1,10 +1,10 @@
 package com.pipe.spotpipe2.application;
 
 import com.pipe.spotpipe2.application.request.ArtistRequest;
-import com.pipe.spotpipe2.application.request.UserRequest;
 import com.pipe.spotpipe2.application.response.ArtistResponse;
-import com.pipe.spotpipe2.application.response.UserResponse;
 import com.pipe.spotpipe2.domain.services.ArtistService;
+import com.pipe.spotpipe2.infra.exceptions.ResourceAlreadyExistsException;
+import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class ArtistController {
                                         UriComponentsBuilder uriBuilder) {
 
         if (artistService.existsByName(artistRequest.getName())) {
-            return ResponseEntity.badRequest().build();
+            throw new ResourceAlreadyExistsException(artistRequest.getName());
         }
 
         final var artist = artistService.save(artistRequest.toModel());
@@ -55,14 +55,14 @@ public class ArtistController {
     public ResponseEntity<ArtistResponse> getArtistById(@PathVariable Long id) {
 
         return ResponseEntity.ok(new ArtistResponse(artistService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
+                .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
 
         final var userModel = artistService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         artistService.delete(userModel);
         return ResponseEntity.noContent().build();
@@ -73,7 +73,7 @@ public class ArtistController {
                                           @RequestBody @Valid ArtistRequest artistRequest) {
 
         final var artist = artistService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         artist.setName(artistRequest.getName());
 

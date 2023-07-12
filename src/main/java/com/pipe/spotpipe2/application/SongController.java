@@ -6,6 +6,7 @@ import com.pipe.spotpipe2.domain.models.songs.Song;
 import com.pipe.spotpipe2.domain.services.AlbumService;
 import com.pipe.spotpipe2.domain.services.ArtistService;
 import com.pipe.spotpipe2.domain.services.SongService;
+import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +39,10 @@ public class SongController {
                                       UriComponentsBuilder uriBuilder) {
 
         var artist = artistService.findById(artistId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(artistId));
 
         var album = albumService.findById(albumId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(albumId));
 
         var song = songRequest.toModel();
 
@@ -68,14 +69,14 @@ public class SongController {
     public ResponseEntity<SongResponse> getSongById(@PathVariable Long id) {
 
         return ResponseEntity.ok(new SongResponse(songService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
+                .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
     @GetMapping("/albums/{id}/songs")
     public ResponseEntity<List<SongResponse>> getAllSongsAlbum(@PathVariable Long id) {
 
         var album = albumService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         return ResponseEntity.ok(album.getSongs().stream().map(SongResponse::new).toList());
     }
@@ -84,7 +85,7 @@ public class SongController {
     public ResponseEntity<?> deleteSong(@PathVariable Long id) {
 
         var song = songService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         song.getAlbum().removeSong(song);
 
@@ -97,7 +98,7 @@ public class SongController {
                                         @RequestBody @Valid SongRequest songRequest) {
 
         var song = songService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         song.setTitle(songRequest.getTitle());
         song.setGenre(songRequest.getGenre());
