@@ -42,4 +42,16 @@ public class Album {
         this.artist = artist;
         this.releaseDate = releaseDate;
     }
+
+    public void addSong(Song song) {
+        this.getSongs().add(song);
+        this.artist.addSong(song);
+        song.setArtist(this.artist);
+        song.setAlbum(this);
+    }
+
+    public void removeSong(Song song) {
+        this.getSongs().remove(song);
+        this.artist.removeSong(song);
+    }
 }

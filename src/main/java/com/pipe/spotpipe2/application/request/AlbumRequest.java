@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +24,8 @@ public class AlbumRequest {
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate releaseDate;
+
+    private List<SongRequest> songs = new ArrayList<>();
 
     public Album toModel(Artist artist) {
         return new Album(title, artist, releaseDate);

@@ -40,7 +40,15 @@ public class Artist {
         this.getAlbums().add(album);
     }
 
+    public void addSong(Song song) {
+        this.getSongs().add(song);
+    }
+
     public void removeAlbum(Album album) {
         this.getAlbums().remove(album);
+    }
+
+    public void removeSong(Song song) {
+        this.getSongs().remove(song);
     }
 }

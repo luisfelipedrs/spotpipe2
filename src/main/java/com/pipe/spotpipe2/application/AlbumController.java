@@ -56,6 +56,13 @@ public class AlbumController {
                 .toList());
     }
 
+    @GetMapping("/albums/{id}")
+    public ResponseEntity<AlbumResponse> getAlbumById(@PathVariable Long id) {
+
+        return ResponseEntity.ok(new AlbumResponse(albumService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
+    }
+
     @GetMapping("/artists/{artistId}/albums")
     public ResponseEntity<List<AlbumResponse>> getAlbunsFromArtist(@PathVariable("artistId") Long id) {
 
