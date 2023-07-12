@@ -32,4 +32,9 @@ public class Artist {
     public Artist(String name) {
         this.name = name;
     }
+
+    public void addAlbum(Album album) {
+        this.getAlbums().add(album);
+        album.setArtist(this);
+    }
 }

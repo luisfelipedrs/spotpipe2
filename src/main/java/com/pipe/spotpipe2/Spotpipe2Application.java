@@ -9,5 +9,4 @@ public class Spotpipe2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Spotpipe2Application.class, args);
 	}
-
 }

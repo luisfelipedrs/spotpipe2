@@ -43,7 +43,7 @@ public class ArtistController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistResponse>> getAllUsers() {
+    public ResponseEntity<List<ArtistResponse>> getAllArtists() {
         return ResponseEntity.ok(artistService.findAll()
                 .stream()
                 .map(ArtistResponse::new)
@@ -51,13 +51,13 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ArtistResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<ArtistResponse> getArtistById(@PathVariable Long id) {
         return ResponseEntity.ok(new ArtistResponse(artistService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
         final var userModel = artistService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 
@@ -66,7 +66,7 @@ public class ArtistController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id,
+    public ResponseEntity<?> updateArtist(@PathVariable Long id,
                                         @RequestBody @Valid ArtistRequest artistRequest) {
         final var artist = artistService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));

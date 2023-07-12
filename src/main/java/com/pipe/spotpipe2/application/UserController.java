@@ -46,6 +46,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
+
         return ResponseEntity.ok(userService.findAll()
                 .stream()
                 .map(UserResponse::new)
@@ -54,12 +55,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+
         return ResponseEntity.ok(new UserResponse(userService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+
         final var userModel = userService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 
@@ -70,6 +73,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id,
                                         @RequestBody @Valid UserRequest userRequest) {
+
         final var userModel = userService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 
