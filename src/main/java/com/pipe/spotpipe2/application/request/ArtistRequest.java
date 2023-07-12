@@ -20,6 +20,8 @@ public class ArtistRequest {
     private List<AlbumRequest> albums = new ArrayList<>();
 
     public Artist toModel() {
-        return new Artist(name);
+        Artist artist = new Artist(name);
+        albums.forEach(album -> artist.addAlbum(album.toModel(artist)));
+        return artist;
     }
 }

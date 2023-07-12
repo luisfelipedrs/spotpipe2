@@ -28,6 +28,8 @@ public class AlbumRequest {
     private List<SongRequest> songs = new ArrayList<>();
 
     public Album toModel(Artist artist) {
-        return new Album(title, artist, releaseDate);
+        Album album = new Album(title, artist, releaseDate);
+        songs.forEach(song -> album.addSong(song.toModel()));
+        return album;
     }
 }
