@@ -17,7 +17,6 @@ public class AlbumService {
         this.albumRepository = albumRepository;
     }
 
-    @Transactional
     public Album save(Album album) {
         return albumRepository.save(album);
     }
@@ -30,7 +29,6 @@ public class AlbumService {
         return albumRepository.findAll();
     }
 
-    @Transactional
     public void delete(Album album) {
         albumRepository.delete(album);
     }

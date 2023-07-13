@@ -2,22 +2,18 @@ package com.pipe.spotpipe2.application;
 
 import com.pipe.spotpipe2.application.request.SongRequest;
 import com.pipe.spotpipe2.application.response.SongResponse;
-import com.pipe.spotpipe2.domain.models.songs.Song;
 import com.pipe.spotpipe2.domain.services.AlbumService;
 import com.pipe.spotpipe2.domain.services.ArtistService;
 import com.pipe.spotpipe2.domain.services.SongService;
 import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.*;
 
 @RestController
 public class SongController {
@@ -32,6 +28,7 @@ public class SongController {
         this.songService = songService;
     }
 
+    @Transactional
     @PostMapping("/artists/{artistId}/albums/{albumId}/songs")
     public ResponseEntity<?> saveSong(@PathVariable("artistId") Long artistId,
                                       @PathVariable("albumId") Long albumId,
@@ -56,6 +53,7 @@ public class SongController {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional
     @GetMapping("/songs")
     public ResponseEntity<List<SongResponse>> getAllSongs() {
 
@@ -65,6 +63,7 @@ public class SongController {
                 .toList());
     }
 
+    @Transactional
     @GetMapping("/songs/{id}")
     public ResponseEntity<SongResponse> getSongById(@PathVariable Long id) {
 
@@ -72,6 +71,7 @@ public class SongController {
                 .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
+    @Transactional
     @GetMapping("/albums/{id}/songs")
     public ResponseEntity<List<SongResponse>> getAllSongsAlbum(@PathVariable Long id) {
 
@@ -81,6 +81,7 @@ public class SongController {
         return ResponseEntity.ok(album.getSongs().stream().map(SongResponse::new).toList());
     }
 
+    @Transactional
     @DeleteMapping("/songs/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable Long id) {
 
@@ -93,6 +94,7 @@ public class SongController {
         return ResponseEntity.noContent().build();
     }
 
+    @Transactional
     @PutMapping("/songs/{id}")
     public ResponseEntity<?> updateSong(@PathVariable Long id,
                                         @RequestBody @Valid SongRequest songRequest) {

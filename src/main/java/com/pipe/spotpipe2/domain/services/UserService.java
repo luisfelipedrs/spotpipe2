@@ -17,7 +17,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public UserModel save(UserModel userModel) {
         return userRepository.save(userModel);
     }
@@ -30,7 +29,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Transactional
     public void delete(UserModel userModel) {
         userRepository.delete(userModel);
     }

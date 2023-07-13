@@ -2,19 +2,18 @@ package com.pipe.spotpipe2.application;
 
 import com.pipe.spotpipe2.application.request.ArtistRequest;
 import com.pipe.spotpipe2.application.response.ArtistResponse;
+import com.pipe.spotpipe2.domain.models.artists.ArtistRepository;
 import com.pipe.spotpipe2.domain.services.ArtistService;
 import com.pipe.spotpipe2.infra.exceptions.ResourceAlreadyExistsException;
 import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/artists")
@@ -26,6 +25,7 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
+    @Transactional
     @PostMapping
     public ResponseEntity<?> saveArtist(@RequestBody @Valid ArtistRequest artistRequest,
                                         UriComponentsBuilder uriBuilder) {
@@ -42,6 +42,7 @@ public class ArtistController {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional
     @GetMapping
     public ResponseEntity<List<ArtistResponse>> getAllArtists() {
 
@@ -51,6 +52,7 @@ public class ArtistController {
                 .toList());
     }
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<ArtistResponse> getArtistById(@PathVariable Long id) {
 
@@ -58,6 +60,7 @@ public class ArtistController {
                 .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
 
@@ -68,6 +71,7 @@ public class ArtistController {
         return ResponseEntity.noContent().build();
     }
 
+    @Transactional
     @PutMapping("/{id}")
     public ResponseEntity<?> updateArtist(@PathVariable Long id,
                                           @RequestBody @Valid ArtistRequest artistRequest) {

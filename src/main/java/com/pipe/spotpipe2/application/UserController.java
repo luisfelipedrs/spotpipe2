@@ -5,6 +5,7 @@ import com.pipe.spotpipe2.application.response.UserResponse;
 import com.pipe.spotpipe2.domain.services.UserService;
 import com.pipe.spotpipe2.infra.exceptions.ResourceAlreadyExistsException;
 import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Transactional
     @PostMapping
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserRequest userRequest,
                                       UriComponentsBuilder uriBuilder) {
@@ -43,6 +45,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
 
@@ -52,6 +55,7 @@ public class UserController {
                 .toList());
     }
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
@@ -59,6 +63,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 
@@ -69,6 +74,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Transactional
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id,
                                         @RequestBody @Valid UserRequest userRequest) {

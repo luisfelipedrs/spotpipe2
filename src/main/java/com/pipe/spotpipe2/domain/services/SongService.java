@@ -17,7 +17,6 @@ public class SongService {
         this.songRepository = songRepository;
     }
 
-    @Transactional
     public Song save(Song song) {
         return songRepository.save(song);
     }
@@ -30,7 +29,6 @@ public class SongService {
         return songRepository.findAll();
     }
 
-    @Transactional
     public void delete(Song song) {
         songRepository.delete(song);
     }

@@ -1,6 +1,7 @@
 package com.pipe.spotpipe2.domain.models.albums;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pipe.spotpipe2.domain.models.artists.Artist;
 import com.pipe.spotpipe2.domain.models.songs.Song;
@@ -10,8 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -35,7 +36,7 @@ public class Album {
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Song> songs = new HashSet<>();
+    private List<Song> songs = new ArrayList<>();
 
     public Album(String title, Artist artist, LocalDate releaseDate) {
         this.title = title;

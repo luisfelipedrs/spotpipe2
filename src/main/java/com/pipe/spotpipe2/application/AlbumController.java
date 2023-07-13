@@ -5,6 +5,7 @@ import com.pipe.spotpipe2.application.response.AlbumResponse;
 import com.pipe.spotpipe2.domain.services.AlbumService;
 import com.pipe.spotpipe2.domain.services.ArtistService;
 import com.pipe.spotpipe2.infra.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class AlbumController {
         this.artistService = artistService;
     }
 
+    @Transactional
     @PostMapping("/artists/{id}/albums")
     public ResponseEntity<?> saveAlbumToArtist(@PathVariable Long id,
                                              @RequestBody @Valid AlbumRequest albumRequest,
@@ -43,6 +45,7 @@ public class AlbumController {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional
     @GetMapping("/albums")
     public ResponseEntity<List<AlbumResponse>> getAllAlbums() {
 
@@ -52,6 +55,7 @@ public class AlbumController {
                 .toList());
     }
 
+    @Transactional
     @GetMapping("/albums/{id}")
     public ResponseEntity<AlbumResponse> getAlbumById(@PathVariable Long id) {
 
@@ -59,6 +63,7 @@ public class AlbumController {
                 .orElseThrow(() -> new ResourceNotFoundException(id))));
     }
 
+    @Transactional
     @GetMapping("/artists/{artistId}/albums")
     public ResponseEntity<List<AlbumResponse>> getAlbunsFromArtist(@PathVariable("artistId") Long id) {
 
@@ -71,6 +76,7 @@ public class AlbumController {
                 .toList());
     }
 
+    @Transactional
     @DeleteMapping("/albums/{id}")
     public ResponseEntity<?> deleteAlbum(@PathVariable Long id) {
 
@@ -83,6 +89,7 @@ public class AlbumController {
         return ResponseEntity.noContent().build();
     }
 
+    @Transactional
     @PutMapping("/albums/{id}")
     public ResponseEntity<?> updateAlbum(@PathVariable Long id,
                                          @RequestBody @Valid AlbumRequest albumRequest) {

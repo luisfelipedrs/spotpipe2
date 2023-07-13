@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,7 +32,7 @@ public class Artist {
 
     @JsonManagedReference
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
-    private Set<Album> albums = new HashSet<>();
+    private List<Album> albums = new ArrayList<>();
 
     public Artist(String name) {
         this.name = name;

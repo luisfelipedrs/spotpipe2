@@ -17,7 +17,6 @@ public class ArtistService {
         this.artistRepository = artistRepository;
     }
 
-    @Transactional
     public Artist save(Artist artist) {
         return artistRepository.save(artist);
     }
@@ -30,7 +29,6 @@ public class ArtistService {
         return artistRepository.findAll();
     }
 
-    @Transactional
     public void delete(Artist artist) {
         artistRepository.delete(artist);
     }
